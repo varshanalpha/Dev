@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHRONICLE | Modern Engineering & Design Publication</title>
+    <meta name="description" content="A modern full-stack blogging platform exploring software architecture, AI systems, and frontend craft.">
+    <meta name="keywords" content="blog, tech blog, software engineering, architecture, web development">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+</head>
+<body>
+    <!-- Top Reading Progress Indicator -->
+    <div id="reading-progress-bar" class="reading-progress-bar"></div>
+
+    <!-- Navigation Bar -->
+    <header class="navbar-wrapper">
+        <nav class="navbar container">
+            <a href="#/" class="brand-logo" id="brand-logo-link">
+                <span class="brand-icon">✦</span>
+                <span class="brand-name">CHRONICLE</span>
+                <span class="brand-tag">DEV</span>
+            </a>
+
+            <!-- Search Bar in Nav -->
+            <div class="nav-search-container">
+                <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="global-search-input" placeholder="Search posts, topics, ideas..." autocomplete="off">
+                <button id="clear-search-btn" class="clear-search-btn hidden" title="Clear search">&times;</button>
+            </div>
+
+            <!-- Nav Actions -->
+            <div class="nav-actions">
+                <!-- Theme Switcher -->
+                <button id="theme-toggle-btn" class="icon-btn theme-toggle" title="Toggle Light/Dark Theme" aria-label="Toggle theme">
+                    <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+
+                <!-- Auth State Dependent Buttons -->
+                <div id="auth-nav-container" class="auth-nav-container">
+                    <!-- Populated dynamically via ui.js -->
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Dynamic Application Container -->
+    <main id="app-viewport" class="app-viewport">
+        <!-- Rendered dynamically by client router -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <div class="brand-logo footer-logo">
+                    <span class="brand-icon">✦</span>
+                    <span class="brand-name">CHRONICLE</span>
+                </div>
+                <p class="footer-tagline">A full-stack publication built with Node.js, Express, SQLite, and vanilla modern frontend.</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>Platform</h4>
+                    <a href="#/">Home Feed</a>
+                    <a href="#/category/Engineering">Engineering</a>
+                    <a href="#/category/Design">Design</a>
+                    <a href="#/category/AI">Artificial Intelligence</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Demo Accounts</h4>
+                    <button class="footer-demo-btn" data-email="alex@example.com">Log in as Alex</button>
+                    <button class="footer-demo-btn" data-email="sarah@example.com">Log in as Sarah</button>
+                    <button class="footer-demo-btn" data-email="marcus@example.com">Log in as Marcus</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom container">
+            <p>&copy; 2026 Chronicle Media Inc. All rights reserved. REST API & Auth Enabled.</p>
+        </div>
+    </footer>
+
+    <!-- Auth Modal (Login / Register) -->
+    <div id="auth-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+        <div class="modal-card auth-modal-card">
+            <button class="modal-close-btn" id="auth-modal-close" aria-label="Close modal">&times;</button>
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" id="tab-login-btn">Sign In</button>
+                <button class="auth-tab-btn" id="tab-register-btn">Create Account</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form">
+                <div class="form-header">
+                    <h3 class="form-title">Welcome back</h3>
+                    <p class="form-subtitle">Enter your credentials to manage posts and participate in discussions.</p>
+                </div>
+
+                <div class="demo-quick-bar">
+                    <span class="demo-label">Demo logins:</span>
+                    <div class="demo-chips">
+                        <button type="button" class="demo-chip" data-fill="alex_chen">Alex (Lead)</button>
+                        <button type="button" class="demo-chip" data-fill="sarah_dev">Sarah (CSS)</button>
+                        <button type="button" class="demo-chip" data-fill="marcus_ai">Marcus (AI)</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="login-identifier">Email or Username</label>
+                    <input type="text" id="login-identifier" placeholder="alex_chen or alex@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="••••••••" required>
+                </div>
+
+                <div id="login-error-msg" class="auth-error-banner hidden"></div>
+
+                <button type="submit" class="btn btn-primary btn-block" id="login-submit-btn">
+                    <span>Sign In</span>
+                    <span class="btn-spinner hidden"></span>
+                </button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="auth-form hidden">
+                <div class="form-header">
+                    <h3 class="form-title">Join Chronicle</h3>
+                    <p class="form-subtitle">Publish articles, share architectural insights, and join discussions.</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-username">Username</label>
+                    <input type="text" id="reg-username" placeholder="e.g. dev_sarah" minlength="3" maxlength="30" required>
+                    <span class="form-hint">3-30 characters, letters, numbers, and underscores.</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-email">Email Address</label>
+                    <input type="email" id="reg-email" placeholder="sarah@company.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-password">Password</label>
+                    <input type="password" id="reg-password" placeholder="At least 6 characters" minlength="6" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-bio">Bio (Optional)</label>
+                    <input type="text" id="reg-bio" placeholder="e.g. Fullstack engineer, open source lover">
+                </div>
+
+                <div id="register-error-msg" class="auth-error-banner hidden"></div>
+
+                <button type="submit" class="btn btn-primary btn-block" id="register-submit-btn">
+                    <span>Create Free Account</span>
+                    <span class="btn-spinner hidden"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Post Editor Modal (Create / Edit) -->
+    <div id="editor-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+        <div class="modal-card editor-modal-card">
+            <div class="editor-modal-header">
+                <div>
+                    <h2 id="editor-modal-title" class="modal-title">Write New Story</h2>
+                    <p class="modal-subtitle">Share your insights, code patterns, or technical breakdowns.</p>
+                </div>
+                <button class="modal-close-btn" id="editor-modal-close" aria-label="Close modal">&times;</button>
+            </div>
+
+            <form id="post-editor-form" class="editor-form">
+                <input type="hidden" id="editor-post-id" value="">
+
+                <div class="editor-row">
+                    <div class="form-group flex-2">
+                        <label for="editor-title">Title *</label>
+                        <input type="text" id="editor-title" placeholder="e.g. Building Real-Time Distributed Systems" required>
+                    </div>
+
+                    <div class="form-group flex-1">
+                        <label for="editor-category">Category</label>
+                        <select id="editor-category">
+                            <option value="Engineering">Engineering</option>
+                            <option value="Design">Design</option>
+                            <option value="AI">AI & Machine Learning</option>
+                            <option value="Architecture">Architecture</option>
+                            <option value="DevOps">DevOps</option>
+                            <option value="General">General</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="editor-row">
+                    <div class="form-group flex-2">
+                        <label for="editor-cover">Cover Image URL (Optional)</label>
+                        <input type="url" id="editor-cover" placeholder="https://images.unsplash.com/...">
+                    </div>
+                    <div class="form-group flex-1">
+                        <label>Quick Cover Preset</label>
+                        <div class="preset-covers">
+                            <button type="button" class="preset-btn" data-preset="tech">Tech</button>
+                            <button type="button" class="preset-btn" data-preset="design">Design</button>
+                            <button type="button" class="preset-btn" data-preset="ai">AI</button>
+                            <button type="button" class="preset-btn" data-preset="code">Code</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="editor-excerpt">Excerpt / Summary (Optional)</label>
+                    <input type="text" id="editor-excerpt" placeholder="A concise 1-2 sentence hook for post cards. If left blank, it will be generated automatically.">
+                </div>
+
+                <!-- Markdown Content / Preview Switch -->
+                <div class="form-group editor-content-group">
+                    <div class="editor-content-header">
+                        <label for="editor-content">Content (Markdown Supported) *</label>
+                        <div class="editor-view-toggle">
+                            <button type="button" class="view-toggle-btn active" id="btn-edit-mode">Write</button>
+                            <button type="button" class="view-toggle-btn" id="btn-preview-mode">Preview</button>
+                        </div>
+                    </div>
+                    <textarea id="editor-content" rows="12" placeholder="Write your post content here. You can use markdown like:&#10;&#10;# Heading 1&#10;## Subheading&#10;**Bold text**, *italic text*&#10;- Bullet point 1&#10;- Bullet point 2&#10;&#10;```javascript&#10;console.log('Hello Chronicle');&#10;```" required></textarea>
+                    <div id="editor-preview-container" class="editor-preview markdown-body hidden"></div>
+                </div>
+
+                <div id="editor-error-msg" class="auth-error-banner hidden"></div>
+
+                <div class="editor-footer-actions">
+                    <button type="button" class="btn btn-secondary" id="editor-cancel-btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="editor-submit-btn">
+                        <span id="editor-submit-text">Publish Post</span>
+                        <span class="btn-spinner hidden"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="confirm-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true">
+        <div class="modal-card confirm-modal-card">
+            <div class="confirm-icon-wrapper">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" class="confirm-icon">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+            </div>
+            <h3 id="confirm-title" class="confirm-title">Are you sure?</h3>
+            <p id="confirm-message" class="confirm-message">This action cannot be undone.</p>
+            <div class="confirm-actions">
+                <button id="confirm-cancel-btn" class="btn btn-secondary">Cancel</button>
+                <button id="confirm-action-btn" class="btn btn-danger">
+                    <span>Delete</span>
+                    <span class="btn-spinner hidden"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <!-- Application Scripts -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
